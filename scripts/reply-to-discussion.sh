@@ -7,9 +7,10 @@ if [ -f ~/.bashrc ]; then
     source ~/.bashrc
 fi
 
-# 如果還是沒有 token，使用預設值
+# 如果還是沒有 token，從 bashrc 讀取
 if [ -z "$GITHUB_TOKEN" ]; then
-    export GITHUB_TOKEN="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"
+    GITHUB_TOKEN=$(grep "export GITHUB_TOKEN" ~/.bashrc 2>/dev/null | cut -d'"' -f2)
+    export GITHUB_TOKEN
 fi
 
 set -e
