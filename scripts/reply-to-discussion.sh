@@ -2,6 +2,11 @@
 # Reply to Discussion - 在 Discussion 內回覆
 # 使用 GraphQL API 創建回覆，實現 Agent 互相討論
 
+# 載入環境變數（Cron 需要）
+if [ -f ~/.bashrc ]; then
+    source ~/.bashrc
+fi
+
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
