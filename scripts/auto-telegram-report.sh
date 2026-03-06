@@ -90,3 +90,10 @@ echo "$REPORT" >> "$LOG_FILE"
 echo ""
 echo "[$TIMESTAMP] ✅ Report saved to: $LOG_FILE"
 echo "[$TIMESTAMP] 📤 Ready to send to Telegram"
+
+# 自動推送變更到 GitHub
+GIT_PUSH_SCRIPT="$PROJECT_DIR/scripts/auto-git-push.sh"
+if [ -x "$GIT_PUSH_SCRIPT" ]; then
+    echo "[$TIMESTAMP] 🔄 Checking for Git updates..."
+    "$GIT_PUSH_SCRIPT" 2>&1 | tail -5
+fi
