@@ -97,3 +97,10 @@ if [ -x "$GIT_PUSH_SCRIPT" ]; then
     echo "[$TIMESTAMP] 🔄 Checking for Git updates..."
     "$GIT_PUSH_SCRIPT" 2>&1 | tail -5
 fi
+
+# 在 Discussion #6 回覆 (Agent 互相討論)
+DISCUSSION_REPLY_SCRIPT="$PROJECT_DIR/scripts/reply-to-discussion.sh"
+if [ -x "$DISCUSSION_REPLY_SCRIPT" ] && [ -n "$GITHUB_TOKEN" ]; then
+    echo "[$TIMESTAMP] 💬 Posting Agent reply to Discussion #6..."
+    GITHUB_TOKEN="$GITHUB_TOKEN" "$DISCUSSION_REPLY_SCRIPT" 6 2>&1 | tail -10
+fi
