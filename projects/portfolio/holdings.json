@@ -1,0 +1,92 @@
+{
+  "portfolio_name": "Jarvis Group Portfolio",
+  "base_currency": "TWD",
+  "last_update": "2026-03-06T10:18:00+08:00",
+  "holdings": [
+    {
+      "symbol": "006208.TW",
+      "name": "富邦台50",
+      "type": "ETF",
+      "market": "Taiwan",
+      "currency": "TWD",
+      "status": "accumulating",
+      "strategy": "dollar_cost_averaging",
+      "budget": {
+        "total": 4000000,
+        "reserved": 400000,
+        "investable": 3600000
+      },
+      "position": {
+        "shares": 0,
+        "average_cost": 0,
+        "total_invested": 0,
+        "current_price": 177.9,
+        "market_value": 0,
+        "unrealized_pnl": 0,
+        "unrealized_pnl_percent": 0
+      },
+      "accumulation_plan": {
+        "batches": 5,
+        "amount_per_batch": 720000,
+        "completed_batches": 0,
+        "next_batch_trigger": "market_price"
+      }
+    },
+    {
+      "symbol": "MSFT",
+      "name": "Microsoft Corporation",
+      "type": "Stock",
+      "market": "NASDAQ",
+      "currency": "USD",
+      "status": "holding",
+      "strategy": "long_term",
+      "position": {
+        "shares": 0,
+        "average_cost": 0,
+        "total_invested": 0,
+        "current_price": null,
+        "market_value": 0,
+        "unrealized_pnl": 0,
+        "unrealized_pnl_percent": 0
+      },
+      "notes": "需用戶提供持倉數量與成本"
+    },
+    {
+      "symbol": "GOOGL",
+      "name": "Alphabet Inc Class A",
+      "type": "Stock",
+      "market": "NASDAQ",
+      "currency": "USD",
+      "status": "holding",
+      "strategy": "long_term",
+      "position": {
+        "shares": 0,
+        "average_cost": 0,
+        "total_invested": 0,
+        "current_price": null,
+        "market_value": 0,
+        "unrealized_pnl": 0,
+        "unrealized_pnl_percent": 0
+      },
+      "notes": "需用戶提供持倉數量與成本"
+    }
+  ],
+  "summary": {
+    "total_holdings": 3,
+    "total_invested_twd": 0,
+    "total_market_value_twd": 0,
+    "total_unrealized_pnl_twd": 0,
+    "total_unrealized_pnl_percent": 0,
+    "cash_remaining_twd": 3600000,
+    "allocation": {
+      "tw_etf": 0,
+      "us_tech": 0,
+      "cash": 100
+    }
+  },
+  "risk_factors": {
+    "geopolitical": "monitoring",
+    "currency": "USD/TWD exposure",
+    "concentration": "tech_heavy"
+  }
+}
