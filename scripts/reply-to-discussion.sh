@@ -7,6 +7,11 @@ if [ -f ~/.bashrc ]; then
     source ~/.bashrc
 fi
 
+# 如果還是沒有 token，使用預設值
+if [ -z "$GITHUB_TOKEN" ]; then
+    export GITHUB_TOKEN="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"
+fi
+
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -14,7 +19,6 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
 
 # GitHub 配置
-GITHUB_TOKEN="${GITHUB_TOKEN:-}"
 DISCUSSION_NUMBER="${1:-6}"  # 預設使用 Discussion #6
 
 # Agent 人設
