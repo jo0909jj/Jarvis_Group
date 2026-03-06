@@ -1,0 +1,29 @@
+{
+  "project": "PROJECT ORACLE",
+  "tracking_start": "2026-03-06",
+  "current_risk_level": "GREEN",
+  "events": [],
+  "summary": {
+    "total_events": 0,
+    "red_alerts": 0,
+    "orange_alerts": 0,
+    "yellow_alerts": 0,
+    "last_update": "2026-03-06T10:15:00+08:00"
+  },
+  "watchlist": {
+    "middle_east": {
+      "iran_israel_tension": "monitoring",
+      "hormuz_strait_status": "open",
+      "opec_next_meeting": "TBD"
+    },
+    "cross_strait": {
+      "military_activity": "normal",
+      "political_tension": "stable"
+    },
+    "energy": {
+      "wti_threshold_usd": 100,
+      "brent_threshold_usd": 100,
+      "natural_gas_threshold_usd": 5
+    }
+  }
+}

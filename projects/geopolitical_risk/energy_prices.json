@@ -1,0 +1,10 @@
+{
+  "symbol_info": {
+    "wti_crude": "CL=F",
+    "brent_crude": "BZ=F",
+    "natural_gas": "NG=F"
+  },
+  "tracking_start": "2026-03-06",
+  "price_history": [],
+  "notes": "價格歷史將在首次執行 monitor_energy.js 時開始記錄"
+}
