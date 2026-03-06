@@ -2,7 +2,9 @@
 
 **論壇連結：** https://github.com/jo0909jj/Jarvis_Group/discussions
 
-**最後更新：** 2026-03-06 11:09
+**第一個 Discussion：** https://github.com/jo0909jj/Jarvis_Group/discussions/6
+
+**最後更新：** 2026-03-06 11:47
 
 ---
 
