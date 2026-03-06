@@ -10,25 +10,30 @@ TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
 
 echo "[$TIMESTAMP] 🚀 Generating quick report..."
 
-# 查詢投資組合
+# 查詢投資組合 (過濾 notice 訊息)
 cd "$PROJECT_DIR/projects/portfolio"
-PORTFOLIO=$(node fetch_all.js 2>/dev/null)
+PORTFOLIO_FILE="/tmp/portfolio_$$_.json"
+node fetch_all.js 2>&1 | grep -v "survey\|bit.ly\|github.com" > "$PORTFOLIO_FILE" || echo "{}" > "$PORTFOLIO_FILE"
 
 # 查詢能源
 cd "$PROJECT_DIR/projects/geopolitical_risk"
-ENERGY=$(node monitor_energy.js 2>/dev/null)
+ENERGY_FILE="/tmp/energy_$$_.json"
+node monitor_energy.js 2>&1 | grep -v "survey\|bit.ly\|github.com" > "$ENERGY_FILE" || echo "{}" > "$ENERGY_FILE"
 
-# 提取關鍵數據
-TW_PRICE=$(echo "$PORTFOLIO" | jq -r '.holdings["006208.TW"].price' 2>/dev/null || echo "N/A")
-TW_CHANGE=$(echo "$PORTFOLIO" | jq -r '.holdings["006208.TW"].changePercent' 2>/dev/null || echo "N/A")
-MSFT_PRICE=$(echo "$PORTFOLIO" | jq -r '.holdings.MSFT.price' 2>/dev/null || echo "N/A")
-MSFT_CHANGE=$(echo "$PORTFOLIO" | jq -r '.holdings.MSFT.changePercent' 2>/dev/null || echo "N/A")
-GOOGL_PRICE=$(echo "$PORTFOLIO" | jq -r '.holdings.GOOGL.price' 2>/dev/null || echo "N/A")
-GOOGL_CHANGE=$(echo "$PORTFOLIO" | jq -r '.holdings.GOOGL.changePercent' 2>/dev/null || echo "N/A")
+# 提取關鍵數據 (使用正確的 jq 語法)
+TW_PRICE=$(jq -r '.holdings | .["006208.TW"] | .price' "$PORTFOLIO_FILE" 2>/dev/null || echo "N/A")
+TW_CHANGE=$(jq -r '.holdings | .["006208.TW"] | .changePercent' "$PORTFOLIO_FILE" 2>/dev/null || echo "N/A")
+MSFT_PRICE=$(jq -r '.holdings.MSFT.price' "$PORTFOLIO_FILE" 2>/dev/null || echo "N/A")
+MSFT_CHANGE=$(jq -r '.holdings.MSFT.changePercent' "$PORTFOLIO_FILE" 2>/dev/null || echo "N/A")
+GOOGL_PRICE=$(jq -r '.holdings.GOOGL.price' "$PORTFOLIO_FILE" 2>/dev/null || echo "N/A")
+GOOGL_CHANGE=$(jq -r '.holdings.GOOGL.changePercent' "$PORTFOLIO_FILE" 2>/dev/null || echo "N/A")
 
-WTI_PRICE=$(echo "$ENERGY" | jq -r '.crude_oil.wti.price' 2>/dev/null || echo "N/A")
-WTI_CHANGE=$(echo "$ENERGY" | jq -r '.crude_oil.wti.changePercent' 2>/dev/null || echo "N/A")
-RISK_LEVEL=$(echo "$ENERGY" | jq -r '.risk_level.level' 2>/dev/null || echo "N/A")
+WTI_PRICE=$(jq -r '.crude_oil.wti.price' "$ENERGY_FILE" 2>/dev/null || echo "N/A")
+WTI_CHANGE=$(jq -r '.crude_oil.wti.changePercent' "$ENERGY_FILE" 2>/dev/null || echo "N/A")
+RISK_LEVEL=$(jq -r '.risk_level.level' "$ENERGY_FILE" 2>/dev/null || echo "N/A")
+
+# 清理臨時檔案
+rm -f "$PORTFOLIO_FILE" "$ENERGY_FILE"
 
 # 建立快速結論
 REPORT="📊 **Jarvis Group 快速報告** [$TIMESTAMP]
