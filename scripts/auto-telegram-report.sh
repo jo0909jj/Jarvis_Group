@@ -1,17 +1,30 @@
 #!/bin/bash
 # Auto Telegram Report - 自動 Telegram 報告
-# 每 10 分鐘執行，整合離線處理機制
+# 根據時間自動判斷台股/美股
 
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 TIMESTAMP=$(date +"%Y-%m-%d %H:%M:%S")
+HOUR=$(date +%H)
 LOG_DIR="$PROJECT_DIR/logs"
 
 mkdir -p "$LOG_DIR"
 
-echo "[$TIMESTAMP] 🚀 Generating Telegram report..."
+# 判斷是台股還是美股時段
+if [ "$HOUR" -ge 9 ] && [ "$HOUR" -lt 14 ]; then
+    MARKET_TYPE="台股"
+    MARKET_EMOJI="🇹🇼"
+elif [ "$HOUR" -ge 22 ] || [ "$HOUR" -lt 6 ]; then
+    MARKET_TYPE="美股"
+    MARKET_EMOJI="🇺🇸"
+else
+    MARKET_TYPE="混合"
+    MARKET_EMOJI="🌏"
+fi
+
+echo "[$TIMESTAMP] 🚀 Generating $MARKET_TYPE report..."
 
 # 先檢查網路狀態
 OFFLINE_HANDLER="$PROJECT_DIR/scripts/offline-handler.sh"
