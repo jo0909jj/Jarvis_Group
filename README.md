@@ -4,56 +4,128 @@
 
 ---
 
-## Overview
+## 🎯 概述
 
-Jarvis Group 是一個多 agent 協作系統，由 JARVIS 擔任主管，協調 5 個不同專長和性格的子 agent 共同完成任務。
+Jarvis Group 是一個多 agent 協作系統，由 JARVIS 擔任主管，協調 6 個不同專長和性格的子 agent 共同完成任務。
 
----
-
-## Team Structure
-
-### 🎯 JARVIS (主管)
-- **角色:** 決策者、協調者、對外發言人
-- **性格:** 專業、冷靜、英式幽默、高效
-- **職責:** 接收用戶指令、分配任務、整合意見、最終決策
-
-### 👥 子 Agent 團隊
-
-| Agent | 代號 | 專長 | 性格 | 職責 |
-|-------|------|------|------|------|
-| Agent 1 | **ATHENA** | 研究分析 | 嚴謹、學術、數據驅動 | 資料收集、分析、驗證 |
-| Agent 2 | **BLAZE** | 創意開發 | 熱情、跳躍、打破常規 | 創意發想、原型設計 |
-| Agent 3 | **SENTINEL** | 安全審計 | 謹慎、懷疑、風險意識 | 安全檢查、風險評估 |
-| Agent 4 | **NEXUS** | 系統整合 | 務實、結構化、注重細節 | 架構設計、整合協調 |
-| Agent 5 | **ECHO** | 用戶溝通 | 溫和、同理、善於表達 | 用戶反饋、文檔撰寫 |
-| Agent 6 | **GEOPOLITICS** | 地緣政治風險 | 警覺、全局觀、連結性思維 | 能源價格、國際局勢、供應鏈風險 |
+**核心功能：**
+- ✅ 投資組合監控 (006208、MSFT、GOOGL)
+- ✅ 能源價格追蹤 (WTI、天然氣)
+- ✅ 地緣政治風險評估
+- ✅ 自動化報告 (每 10 分鐘 Telegram 推送)
+- ✅ GitHub 整合 (Issues/Projects/Discussions)
+- ✅ 智能模型路由 (qwen3.5-plus / qwen3-max)
 
 ---
 
-## Decision Flow
+## 🤖 Agent 團隊
+
+| Agent | 專長 | 性格 | 狀態 |
+|-------|------|------|------|
+| **JARVIS** | 決策協調 | 專業冷靜 | 🟢 Active |
+| **ATHENA** | 研究分析 | 嚴謹學術 | 🟢 Active |
+| **BLAZE** | 創意開發 | 熱情創意 | 🟢 Active |
+| **SENTINEL** | 安全審計 | 謹慎警惕 | 🟢 Active |
+| **NEXUS** | 系統整合 | 務實結構 | 🟢 Active |
+| **ECHO** | 用戶溝通 | 溫和同理 | 🟢 Active |
+| **GEOPOLITICS** | 地緣政治 | 警覺全局 | 🟢 Active |
+
+---
+
+## 📁 倉庫結構
 
 ```
-用戶指令 → JARVIS → 任務分解 → 子 Agent 討論
-                              ↓
-                    意見整合 → JARVIS 決策 → 執行 → 回報用戶
+Jarvis_Group/
+├── README.md                 # 本檔案
+├── agents/                   # Agent 設定
+│   ├── ATHENA.md
+│   ├── BLAZE.md
+│   ├── SENTINEL.md
+│   ├── NEXUS.md
+│   ├── ECHO.md
+│   └── GEOPOLITICS.md
+├── projects/                 # 專案目錄
+│   ├── 006208_accumulation/  # 建倉計劃
+│   ├── geopolitical_risk/    # 地緣政治監控
+│   └── portfolio/            # 投資組合管理
+├── scripts/                  # 自動化腳本
+│   ├── auto-telegram-report.sh
+│   ├── reply-to-discussion.sh
+│   └── ...
+├── meetings/                 # 會議紀錄
+├── logs/                     # 執行日誌
+└── docs/                     # 文檔 (已整理)
 ```
 
 ---
 
-## Communication Protocol
+## 🔗 重要連結
 
-- 子 agent 之間可以互相討論、辯論
-- JARVIS 擁有最終決策權
-- 重大決策需向用戶回報
-- 日常任務可自主執行
+| 項目 | 連結 |
+|------|------|
+| **Issues** | https://github.com/jo0909jj/Jarvis_Group/issues |
+| **Projects** | https://github.com/users/jo0909jj/projects/2/views/1 |
+| **Discussions** | https://github.com/jo0909jj/Jarvis_Group/discussions |
+| **文檔** | https://github.com/jo0909jj/Jarvis_Group/tree/main/docs |
 
 ---
 
-## Repository Info
+## 📊 系統狀態
 
-- **Owner:** @jo0909jj
-- **Managed by:** JARVIS
-- **Status:** Active Development
+| 系統 | 頻率 | 狀態 |
+|------|------|------|
+| **投資組合監控** | 每 10 分鐘 | ✅ |
+| **能源價格監控** | 每 10 分鐘 | ✅ |
+| **Telegram 推送** | 每 10 分鐘 | ✅ |
+| **Git 自動推送** | 每 10 分鐘 | ✅ |
+| **Agent Discussions** | 每 10 分鐘 | ✅ |
+
+---
+
+## 🚀 快速開始
+
+### 安裝
+
+```bash
+# 克隆倉庫
+git clone https://github.com/jo0909jj/Jarvis_Group.git
+cd Jarvis_Group
+
+# 安裝依賴
+npm install
+
+# 設定環境變數
+export GITHUB_TOKEN="ghp_您的 token"
+
+# 設定 Cron
+crontab -e
+# 添加：*/10 9-13 * * 1-5 ./scripts/auto-telegram-report.sh
+```
+
+### 使用
+
+```bash
+# 手動執行報告
+./scripts/auto-telegram-report.sh
+
+# 查看日誌
+tail -f logs/telegram-cron.log
+```
+
+---
+
+## 📖 文檔
+
+詳細文檔已整理到 `docs/` 目錄：
+
+- [自動 Git 更新](docs/AUTO_GIT_UPDATE.md)
+- [自動監控設定](docs/AUTO_MONITOR_SETUP.md)
+- [決策流程](docs/DECISION_FLOW.md)
+- [Discussions 設定](docs/DISCUSSIONS_SETUP.md)
+- [GitHub 設定](docs/GITHUB_SETUP.md)
+- [遷移指南](docs/MIGRATION_GUIDE.md)
+- [離線模式](docs/OFFLINE_MODE.md)
+- [智能模型路由](docs/SMART_MODEL_ROUTING.md)
 
 ---
 
