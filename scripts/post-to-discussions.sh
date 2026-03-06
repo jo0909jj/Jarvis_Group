@@ -1,6 +1,6 @@
 #!/bin/bash
-# Post to GitHub Discussions - 實際發文到 Discussions
-# 使用 GitHub API 創建討論
+# Post to GitHub Discussions - 使用 GraphQL API
+# GitHub Discussions 主要通過 GraphQL API 訪問
 
 set -e
 
@@ -37,47 +37,19 @@ echo ""
 echo "Agent: $RANDOM_AGENT"
 echo "心情：$MOOD"
 echo "標題：$TITLE"
-echo "內容：$MESSAGE"
 echo ""
 
-# 如果沒有 GitHub Token，提供手動選項
 if [ -z "$GITHUB_TOKEN" ]; then
     echo "⚠️  未設定 GITHUB_TOKEN"
-    echo ""
-    echo "請選擇："
-    echo "1. 手動複製內容到 GitHub"
-    echo "2. 設定 GITHUB_TOKEN 環境變數自動發文"
-    echo ""
-    
-    # 顯示複製內容
-    echo "=========================================="
-    echo "📋 請複製以下內容到 Discussions #6:"
-    echo "=========================================="
-    echo ""
-    echo "**標題：** $TITLE"
-    echo ""
-    echo "**內容：**"
-    echo '```markdown'
-    echo "## 💬 $RANDOM_AGENT 說："
-    echo ""
-    echo "$MESSAGE"
-    echo ""
-    echo "---"
-    echo "**心情:** $MOOD"
-    echo "**時間:** $TIMESTAMP"
-    echo ""
-    echo "---"
-    echo "*來聊聊吧！* 💬"
-    echo '```'
-    echo ""
-    echo "=========================================="
-    echo "🔗 討論區連結：https://github.com/jo0909jj/Jarvis_Group/discussions/6"
-    echo "=========================================="
-else
-    # 使用 GitHub API 發文
-    echo "🚀 使用 GitHub API 發文..."
-    
-    BODY="## 💬 $RANDOM_AGENT 說：
+    echo "請手動複製內容到 Discussions #6"
+    exit 1
+fi
+
+# 使用 GraphQL API
+echo "🚀 使用 GraphQL API 發文..."
+echo ""
+
+BODY="## 💬 $RANDOM_AGENT 說：
 
 $MESSAGE
 
@@ -88,20 +60,59 @@ $MESSAGE
 ---
 *來聊聊吧！* 💬"
 
-    # 創建 Discussion (需要 Repository 權限)
-    RESPONSE=$(curl -s -X POST \
-        -H "Authorization: token $GITHUB_TOKEN" \
-        -H "Accept: application/vnd.github.v3+json" \
-        https://api.github.com/repos/$REPO/discussions \
-        -d "{
-            \"title\": \"$TITLE\",
-            \"body\": \"$BODY\",
-            \"category_id\": \"DIC_kwDO...\"  # 需要查詢 category ID
-        }")
-    
-    echo "$RESPONSE" | jq '.'
+# GraphQL 查詢：獲取 Repository ID
+echo "📋 獲取 Repository ID..."
+REPO_RESPONSE=$(curl -s -X POST \
+    -H "Authorization: bearer $GITHUB_TOKEN" \
+    -H "Content-Type: application/json" \
+    https://api.github.com/graphql \
+    -d "{
+        \"query\": \"query { repository(owner: \\\"jo0909jj\\\", name: \\\"Jarvis_Group\\\") { id, discussionCategories(first: 10) { nodes { id, name } } } }\"
+    }")
+
+echo "Repository 回應："
+echo "$REPO_RESPONSE" | jq '.' 2>/dev/null || echo "$REPO_RESPONSE"
+echo ""
+
+# 提取 Repository ID
+REPO_ID=$(echo "$REPO_RESPONSE" | jq -r '.data.repository.id' 2>/dev/null)
+CATEGORY_ID=$(echo "$REPO_RESPONSE" | jq -r '.data.repository.discussionCategories.nodes[0].id' 2>/dev/null)
+
+if [ -z "$REPO_ID" ] || [ "$REPO_ID" = "null" ]; then
+    echo "❌ 無法獲取 Repository ID"
+    echo "錯誤：$(echo "$REPO_RESPONSE" | jq -r '.errors[0].message' 2>/dev/null || echo "Unknown")"
+    exit 1
+fi
+
+echo "✅ Repository ID: $REPO_ID"
+echo "✅ Category ID: $CATEGORY_ID"
+echo ""
+
+# GraphQL 突變：創建 Discussion
+echo "📝 創建 Discussion..."
+DISCUSSION_RESPONSE=$(curl -s -X POST \
+    -H "Authorization: bearer $GITHUB_TOKEN" \
+    -H "Content-Type: application/json" \
+    https://api.github.com/graphql \
+    -d "{
+        \"query\": \"mutation { createDiscussion(input: {repositoryId: \\\"$REPO_ID\\\", categoryId: \\\"$CATEGORY_ID\\\", title: \\\"$TITLE\\\", body: \\\"$(echo "$BODY" | sed 's/"/\\"/g' | tr '\n' ' ')\\\"}) { discussion { id, url, title } } }\"
+    }")
+
+echo "Discussion 回應："
+echo "$DISCUSSION_RESPONSE" | jq '.' 2>/dev/null || echo "$DISCUSSION_RESPONSE"
+echo ""
+
+# 檢查是否成功
+DISCUSSION_URL=$(echo "$DISCUSSION_RESPONSE" | jq -r '.data.createDiscussion.discussion.url' 2>/dev/null)
+
+if [ -n "$DISCUSSION_URL" ] && [ "$DISCUSSION_URL" != "null" ]; then
+    echo "✅ 發文成功！"
+    echo "🔗 連結：$DISCUSSION_URL"
+else
+    echo "❌ 發文失敗"
+    echo "錯誤：$(echo "$DISCUSSION_RESPONSE" | jq -r '.errors[0].message' 2>/dev/null || echo "Unknown error")"
 fi
 
 # 記錄到日誌
 LOG_FILE="$PROJECT_DIR/logs/discussion-posts-$(date +%Y-%m-%d).log"
-echo "[$TIMESTAMP] $RANDOM_AGENT: $TITLE" >> "$LOG_FILE"
+echo "[$TIMESTAMP] $RANDOM_AGENT: $TITLE -> ${DISCUSSION_URL:-FAILED}" >> "$LOG_FILE"
