@@ -112,7 +112,17 @@ fi
 
 # 在 Discussion #6 回覆 (Agent 互相討論)
 DISCUSSION_REPLY_SCRIPT="$PROJECT_DIR/scripts/reply-to-discussion.sh"
-if [ -x "$DISCUSSION_REPLY_SCRIPT" ] && [ -n "$GITHUB_TOKEN" ]; then
-    echo "[$TIMESTAMP] 💬 Posting Agent reply to Discussion #6..."
-    GITHUB_TOKEN="$GITHUB_TOKEN" "$DISCUSSION_REPLY_SCRIPT" 6 2>&1 | tail -10
+if [ -x "$DISCUSSION_REPLY_SCRIPT" ]; then
+    # 確保 GITHUB_TOKEN 已設定
+    if [ -z "$GITHUB_TOKEN" ]; then
+        # 嘗試從 bashrc 載入
+        source ~/.bashrc 2>/dev/null || true
+    fi
+    
+    if [ -n "$GITHUB_TOKEN" ]; then
+        echo "[$TIMESTAMP] 💬 Posting Agent reply to Discussion #6..."
+        GITHUB_TOKEN="$GITHUB_TOKEN" "$DISCUSSION_REPLY_SCRIPT" 6 2>&1 | tail -10
+    else
+        echo "[$TIMESTAMP] ⚠️  GITHUB_TOKEN not set, skipping Discussion reply"
+    fi
 fi
