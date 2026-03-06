@@ -1,6 +1,6 @@
 #!/bin/bash
 # Auto Telegram Report - 自動 Telegram 報告
-# 每 10 分鐘執行，傳送快速報告到 Telegram
+# 每 10 分鐘執行，整合離線處理機制
 
 set -e
 
@@ -12,6 +12,15 @@ LOG_DIR="$PROJECT_DIR/logs"
 mkdir -p "$LOG_DIR"
 
 echo "[$TIMESTAMP] 🚀 Generating Telegram report..."
+
+# 先檢查網路狀態
+OFFLINE_HANDLER="$PROJECT_DIR/scripts/offline-handler.sh"
+if [ -x "$OFFLINE_HANDLER" ]; then
+    NETWORK_STATUS=$("$OFFLINE_HANDLER" 2>/dev/null | tail -1)
+    echo "[$TIMESTAMP] 🌐 Network Status: $NETWORK_STATUS"
+else
+    NETWORK_STATUS="unknown"
+fi
 
 # 查詢投資組合
 cd "$PROJECT_DIR/projects/portfolio"
