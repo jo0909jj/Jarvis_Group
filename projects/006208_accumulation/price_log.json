@@ -1,7 +1,25 @@
 {
   "symbol": "006208",
   "tracking_start": "2026-03-06",
-  "baseline_price": null,
-  "price_history": [],
-  "notes": "baseline_price 將在首次查詢時設定"
+  "baseline_price": 177.9,
+  "price_history": [
+    {
+      "date": "2026-03-06",
+      "time": "10:10",
+      "price": 177.9,
+      "change": -1.45,
+      "changePercent": -0.81,
+      "open": 178.2,
+      "high": 178.2,
+      "low": 177.1,
+      "volume": 1434003
+    }
+  ],
+  "target_prices": {
+    "batch1": 177.9,
+    "batch2": 169.01,
+    "batch3": 160.11,
+    "batch4": 151.22,
+    "batch5": 142.32
+  }
 }
