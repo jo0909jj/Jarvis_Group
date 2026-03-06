@@ -1,0 +1,32 @@
+{
+  "symbol": "006208",
+  "name": "富邦台50",
+  "totalBudget": 4000000,
+  "reservedCash": 400000,
+  "investableAmount": 3600000,
+  "strategy": {
+    "batches": 5,
+    "percentPerBatch": 20,
+    "amountPerBatch": 720000,
+    "triggerConditions": {
+      "batch1": "market_price",
+      "batch2": "drop_5_percent",
+      "batch3": "drop_10_percent",
+      "batch4": "drop_15_percent",
+      "batch5": "drop_20_percent_or_30days"
+    },
+    "extraTriggers": {
+      "rsi_oversold": 30,
+      "single_day_drop": 3,
+      "consecutive_drop_days": 5
+    }
+  },
+  "holdings": [],
+  "summary": {
+    "totalInvested": 0,
+    "totalShares": 0,
+    "averageCost": 0,
+    "remainingCash": 3600000,
+    "lastUpdate": "2026-03-06T10:00:00+08:00"
+  }
+}
