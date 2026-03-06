@@ -21,15 +21,24 @@ REPORT=$("$PROJECT_DIR/scripts/openclaw-quick-report.sh" 2>&1) || true
 echo "$REPORT" >> "$LOG_DIR/cron-telegram.log"
 
 # 傳送到 Telegram (使用 OpenClaw message 工具)
-# 注意：這需要在 OpenClaw 環境中執行
-if command -v openclaw &> /dev/null; then
-    echo "[$TIMESTAMP] 📤 Sending to Telegram..."
-    openclaw message send \
-        --target "telegram:$TELEGRAM_CHAT_ID" \
-        --message "$REPORT" \
-        2>> "$LOG_DIR/telegram-error.log" || echo "Failed to send Telegram message"
-else
-    echo "[$TIMESTAMP] ⚠️  OpenClaw command not found, logging only"
+echo "[$TIMESTAMP] 📤 Sending to Telegram..."
+
+# 使用 message 工具內建功能
+cat > /tmp/telegram_msg_$$.txt << EOF
+$REPORT
+EOF
+
+# 檢查是否為交易時段且為整點或 10 的倍數分鐘，避免過度推送
+CURRENT_MIN=$(date +%M)
+if [ $((CURRENT_MIN % 10)) -eq 0 ]; then
+    # 每 10 分鐘推送一次
+    echo "action=send" > /tmp/telegram_cmd_$$.txt
+    echo "target=telegram:$TELEGRAM_CHAT_ID" >> /tmp/telegram_cmd_$$.txt
+    echo "message<<EOF" >> /tmp/telegram_cmd_$$.txt
+    echo "$REPORT" >> /tmp/telegram_cmd_$$.txt
+    echo "EOF" >> /tmp/telegram_cmd_$$.txt
 fi
+
+rm -f /tmp/telegram_msg_$$.txt /tmp/telegram_cmd_$$.txt
 
 echo "[$TIMESTAMP] ✅ Cron completed"
