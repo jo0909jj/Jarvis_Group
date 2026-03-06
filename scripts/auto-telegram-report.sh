@@ -89,7 +89,19 @@ echo "$REPORT" >> "$LOG_FILE"
 
 echo ""
 echo "[$TIMESTAMP] ✅ Report saved to: $LOG_FILE"
-echo "[$TIMESTAMP] 📤 Ready to send to Telegram"
+echo "[$TIMESTAMP] 📤 Sending to Telegram..."
+
+# 使用 OpenClaw message 工具發送到 Telegram
+if command -v openclaw &>/dev/null; then
+    openclaw message send \
+        --target "telegram:5826922658" \
+        --message "$REPORT" \
+        2>> "$LOG_DIR/telegram-error.log" && \
+    echo "[$TIMESTAMP] ✅ Telegram message sent" || \
+    echo "[$TIMESTAMP] ⚠️  Failed to send Telegram message"
+else
+    echo "[$TIMESTAMP] ⚠️  OpenClaw command not found, skipping Telegram send"
+fi
 
 # 自動推送變更到 GitHub
 GIT_PUSH_SCRIPT="$PROJECT_DIR/scripts/auto-git-push.sh"
