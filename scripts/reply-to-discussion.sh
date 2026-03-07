@@ -3,14 +3,18 @@
 # 使用 GraphQL API 創建回覆，實現 Agent 互相討論
 
 # 載入環境變數（Cron 需要）
-if [ -f ~/.bashrc ]; then
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+
+if [ -f "$PROJECT_DIR/.env" ]; then
+    source "$PROJECT_DIR/.env"
+elif [ -f ~/.bashrc ]; then
     source ~/.bashrc
 fi
 
-# 如果還是沒有 token，從 bashrc 讀取
 if [ -z "$GITHUB_TOKEN" ]; then
-    GITHUB_TOKEN=$(grep "export GITHUB_TOKEN" ~/.bashrc 2>/dev/null | cut -d'"' -f2)
-    export GITHUB_TOKEN
+    echo "❌ GITHUB_TOKEN 未設定"
+    exit 1
 fi
 
 set -e
