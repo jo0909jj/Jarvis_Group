@@ -1,1 +1,6 @@
-{"status":"online","offline_start":null,"missed_reports":0,"cached_data":[]}
+{
+  "status": "offline",
+  "offline_start": "2026-03-07 10:46:47",
+  "missed_reports": 0,
+  "cached_data": []
+}

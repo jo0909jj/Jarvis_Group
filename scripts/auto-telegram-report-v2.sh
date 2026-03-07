@@ -168,6 +168,12 @@ route_message "investment_report" "$MAIN_REPORT"
 route_message "analysis" "$ATHENA_REPORT"
 route_message "security" "$SENTINEL_REPORT"
 
+# 發送到群組（如果配置了群組 ID）
+if [ -n "$TELEGRAM_GROUP_ID" ]; then
+    echo "[$TIMESTAMP] 📤 Sending to Group ($TELEGRAM_GROUP_ID)..."
+    bash "$SCRIPT_DIR/send-to-all.sh" JARVIS "$MAIN_REPORT" 2>/dev/null || true
+fi
+
 echo "[$TIMESTAMP] ✅ All messages sent"
 
 # 自動推送變更到 GitHub
